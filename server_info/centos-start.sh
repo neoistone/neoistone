@@ -1,3 +1,16 @@
+DEVICE=br-ns
+STP=no
+TYPE=Bridge
+BOOTPROTO=none
+DEFROUTE=yes
+NAME=br-ns
+ONBOOT=yes
+DNS1=8.8.8.8
+DNS2=102.56.142.1
+IPADDR=102.56.142.9
+PREFIX=24
+GATEWAY=102.56.142.1
+
 rhel=`rpm -qa | grep redhat-release`
 centos=`rpm --query centos-release`
 if [[ "${rhel}" == "" ]]; then
@@ -5,45 +18,38 @@ if [[ "${rhel}" == "" ]]; then
                 echo "This OS Not supporte Nspanel support version are the cento7-8/rhel7-8"
                 exit;
          else
-         	centos_version=`cat /etc/centos-release | tr -dc '0-9.'|cut -d \. -f1`
-         	if [[ "${centos_version}"  == "7" ]]; then
-         		os_type="centos${centos_version}"
-         		os_version="${centos_version}"
-         		os_name="centos"
-         	 elif [[ "${centos_version}"  == "8" ]]; then
-         		os_type="centos${centos_version}"
-         		os_version="${centos_version}"
-         		os_name="centos"
-         	 else
-         	  echo "This OS Not supporte Nspanel support version are the cento7-8/rhel7-8"
-         	  exit;
-         	fi
+          centos_version=`cat /etc/centos-release | tr -dc '0-9.'|cut -d \. -f1`
+          if [[ "${centos_version}"  == "7" ]]; then
+            os_type="centos${centos_version}"
+            os_version="${centos_version}"
+            os_name="centos"
+           elif [[ "${centos_version}"  == "8" ]]; then
+            os_type="centos${centos_version}"
+            os_version="${centos_version}"
+            os_name="centos"
+           else
+            echo "This OS Not supporte Nspanel support version are the cento7-8/rhel7-8"
+            exit;
+          fi
         fi
  else
   rhel_versio=`cat /etc/redhat-release | tr -dc '0-9.'|cut -d \. -f1`
   status=`subscription-manager list | egrep -i 'Status:         Subscribed'`
   if [[ "${rhel_versio}"  == "7" ]]; then
-  	     if[ "${status}" == "Status:         Subscribed" ]; then
+         if[ "${status}" == "Status:         Subscribed" ]; then
              os_type="rhel${rhel_versio}"
              os_version="${rhel_versio}"
              os_name="rhel"
          else
            exit;
-  	     fi
+         fi
   elif [[ "${rhel_versio}"  == "8" ]]; then
-           if[ "${status}" == "Status:         Subscribed" ]; then
-             os_type="rhel${rhel_versio}"
-             os_version="${rhel_versio}"
-             os_name="rhel"
-           else
-            exit;
-  	       fi
-  else
-    echo "This OS Not supporte Nspanel support version are the cento7-8/rhel7-8"
-    os_type="not found "
-    os_version="0"
-    os_name="not found"
-    exit;
+   if[ "${status}" == "Status:         Subscribed" ]; then
+      os_type="rhel${rhel_versio}"
+      os_version="${rhel_versio}"
+      os_name="rhel"
+   else
+     exit;
   fi
 fi
 rm -rf /etc/motd
