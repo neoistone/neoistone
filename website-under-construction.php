@@ -1,6 +1,6 @@
 <?php 
 $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? $url = "https://".$_SERVER['HTTP_HOST'] : $url = "http://".$_SERVER['HTTP_HOST'];
-$app = "Madebridge";
+$app = "APP_NAME HERE";
 ?>
 <!DOCTYPE html>
 <html>
