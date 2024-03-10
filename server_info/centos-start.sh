@@ -24,7 +24,7 @@ systemctl enable firewalld
 systemctl start firewalLd
 clear
 cat <<EFO>> /etc/motd
-   _  __ ____ ____   ____ ____ ______ ____   _  __ ____ Hosting
+   _  __ ____ ____   ____ ____ ______ ____   _  __ ____ Hostingaro
   / |/ // __// __ \ /  _// __//_  __// __ \ / |/ // __/ ${os_name}-${os_version} 
  /    // _/ / /_/ /_/ / _\ \   / /  / /_/ //    // _/
 /_/|_//___/ \____//___//___/  /_/   \____//_/|_//___/
